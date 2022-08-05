@@ -1,0 +1,112 @@
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        
+        body,
+        section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+        
+        body {
+            min-height: 100vh;
+            font-family: "Lato", sans-serif;
+            line-height: 1.5;
+            color: #111;
+        }
+        
+        main {
+            max-width: 720px;
+            width: 100%;
+            border: 2.5px solid black;
+            border-radius: 2.5px;
+            box-shadow: 0 10px 20px rgba(17, 17, 17, 0.125), 0 5px 5px rgba(17, 17, 17, 0.25);
+            background-color: #f7b42c;
+            background-image: linear-gradient(315deg, #f7b42c 0%, #fc575e 74%);
+        }
+        
+        h1 {
+            text-align: center;
+            padding: 1rem;
+            color: white;
+        }
+        
+        form {
+            display: flex;
+            padding: 10px;
+        }
+        
+        input,
+        button {
+            font-family: inherit;
+            line-height: inherit;
+            color: inherit;
+            border: 0;
+            padding: 1rem;
+        }
+        
+        input {
+            box-sizing: border-box;
+            width: 80%;
+        }
+        
+        .buttons {
+            display: flex;
+            width: 20%;
+        }
+        
+        button {
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            width: 100%;
+            background-color: black;
+        }
+        
+        section {
+            min-height: 120px;
+            text-align: center;
+            background-color: white;
+        }
+    </style>
+</head>
+<main>
+    <h1>URL Shortener</h1>
+    <form id="post-form">
+        {% csrf_token %}
+        <input type="text" name="link" id="link" autocomplete='off' placeholder="Enter URL here">
+        <div class="buttons">
+            <button type="submit" id="shorten">Shorten</button>
+        </div>
+    </form>
+
+    <section id="section">
+        <h2></h2>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+    $(document).on('submit', '#post-form', function(e) {
+        e.preventDefault(); // prevent reloading the page
+        $.ajax({
+            type: 'POST',
+            url: '/create/',
+            data: {
+                link: $('#link').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function(data) {
+                $('h2').html("localhost:8000/" + data)
+            }
+        });
+    });
+</script>
